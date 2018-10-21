@@ -73,6 +73,10 @@ namespace NexStarSharp
         public void GoToAzElev(double azimuth, double elevation)
         {
             if (!IsConnected) throw new NexStarException("Telescope Not Connected.");
+
+            //Perform Some bounds Checks
+            azimuth = Math.Max(0, azimuth);
+            elevation = Math.Max(0, elevation);
             
             //Convert degrees into fractions of rotation
             double azimuthFraction = azimuth * 0.00277777778; //0.00277777778 is 1/360
