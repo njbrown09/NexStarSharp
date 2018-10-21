@@ -106,6 +106,24 @@ namespace NexStarSharp
             //Clear the read buffer so it doesnt mess up any other commands.
             _SerialPort.DiscardInBuffer();
         }
+        
+        /// <summary>
+        /// Is the telescope currently being moved by GOTO?
+        /// </summary>
+        /// <returns>True of the telescope is currently being moved by goto.</returns>
+        /// <exception cref="NexStarException"></exception>
+        public bool IsMoving()
+        {
+            if (!IsConnected) throw new NexStarException("Telescope Not Connected.");
+            
+            _SerialPort.WriteLine("L"); //L is the command to check if GOTO is currently moving the scope.
+            
+            int moving = _SerialPort.ReadByte();
+            
+            _SerialPort.DiscardInBuffer();
+
+            return moving == 49; //Its in ascii for some reason, and the ascii code for '1' is 49.
+        }
 
         #endregion
 
@@ -132,7 +150,7 @@ namespace NexStarSharp
         }
 
         /// <summary>
-        /// Returns the alignment status
+        /// Is the telescope aligned?
         /// </summary>
         /// <returns>True if aligned, false if not aligned</returns>
         /// <exception cref="NexStarException"></exception>
@@ -142,7 +160,11 @@ namespace NexStarSharp
             
             _SerialPort.WriteLine("J"); //J is the command for checking alignment.
 
-            return _SerialPort.ReadChar() == 1;
+            int aligned = _SerialPort.ReadChar();
+            
+            _SerialPort.DiscardInBuffer();
+
+            return aligned == 1;
         }
 
         #endregion
