@@ -24,7 +24,7 @@ TelescopeModel model = nexStarDevice.GetTelescopeModel();
 
 - Checking if the telescope is aligned
 ```c#
-bool isAligned = nexStarDevice.IsAligned()
+bool isAligned = nexStarDevice.IsAligned();
 ```
 
 - Immediately stop the telescope from moving
